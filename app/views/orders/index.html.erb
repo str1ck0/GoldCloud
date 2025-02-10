@@ -1,0 +1,5 @@
+<% if current_user.admin? %>
+  <%= render 'admin_orders' %>
+<% else %>
+  <%= render 'customer_orders' %>
+<% end %>

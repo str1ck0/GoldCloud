@@ -1,0 +1,10 @@
+.gc-form {
+  display: flex;
+  flex-direction: column;
+
+  background-color: transparent;
+
+  ::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}

@@ -1,0 +1,36 @@
+// Graphical variables
+@import "config/fonts";
+@import "config/colors";
+@import "config/bootstrap_variables";
+
+// External libraries
+@import "bootstrap";
+@import "font-awesome";
+
+// Your CSS partials
+@import "components/index";
+@import "pages/index";
+
+// General rules throughout the application
+
+body {
+  background-color: rgb(0, 0, 0);
+  color: rgb(230, 230, 230)
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.mb-navbar {
+  margin-bottom: 97px;
+}
+
+.mt-header {
+  margin-top: 100px;
+}

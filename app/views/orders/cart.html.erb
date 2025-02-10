@@ -1,0 +1,71 @@
+<div class="container mt-5 cart-container d-flex flex-column justify-content-between"
+      data-controller="cart"
+      data-action="cart-item:sendNewTotal@window->cart#updateTotal">
+  <div class="d-flex align-items-center border-bottom pb-3">
+    <%= link_to items_path do %>
+      <i class="fas fa-arrow-left me-2"></i>
+    <% end %>
+    <h1 class="m-0">Your Cart</h1>
+  </div>
+
+  <div class="cart-products">
+    <% if @order.nil? || @order.order_items.empty? %>
+      <div class="mt-3">
+        <p>Your cart is empty</p>
+        <%= link_to 'Browse Products', items_path, class: 'btn btn-success' %>
+      </div>
+    <% else %>
+      <% @order.order_items.each do |order_item| %>
+        <div class="cart-product-card pe-3 <%= 'unavailable' unless order_item.itemable %>"
+              data-controller="cart-item"
+              data-cart-target="item"
+              data-action="cart-item:updateQuantity->cart#updateTotal"
+              data-cart-item-order-item-id-value="<%= order_item.id %>">
+          <div class="d-flex flex-grow-1 align-items-center">
+            <% if order_item.itemable %>
+              <%= image_tag order_item.itemable.primary_photo_url, alt: order_item.item_name, class: "rounded" %>
+            <% else %>
+              <%= image_tag "default_unavailable.png", alt: "Unavailable Item", class: "rounded opacity-50" %>
+            <% end %>
+            <div class="cart-product-card-infos">
+              <p><%= order_item.item_name %></p>
+              <p id="item-price">
+                R<%= order_item.item_price.round %>
+                <% if order_item.itemable&.is_a?(Product) %>
+                  /g
+                <% end %>
+              </p>
+              <% unless order_item.itemable %>
+                <p class="text-danger">This item is no longer available</p>
+              <% end %>
+            </div>
+          </div>
+
+          <% if order_item.itemable %>
+            <div class="cart-quantity-controls">
+              <i class="fa-solid fa-square-minus fa-lg" data-action="click->cart-item#decrease"></i>
+              <span class="quantity fs-5" data-cart-item-target="quantity"><%= order_item.quantity %></span>
+              <i class="fa-solid fa-square-plus fa-lg" data-action="click->cart-item#increase"></i>
+            </div>
+          <% else %>
+            <div class="cart-quantity-controls opacity-50">
+              <span class="quantity fs-5"><%= order_item.quantity %></span>
+            </div>
+          <% end %>
+
+          <i class="fas fa-trash-alt text-danger ms-4" data-action="click->cart-item#removeItem"></i>
+        </div>
+      <% end %>
+      <div class="mt-3 text-center">
+        <%= link_to 'Add more products', items_path, class: "btn btn-sm btn-info mb-5" %>
+      </div>
+    <% end %>
+  </div>
+
+  <% unless @order.nil? || @order.order_items.empty? %>
+    <div class="cart-total-confirm d-flex align-items-center justify-content-between border-top">
+      <p class="fs-4 m-0" data-cart-target="total">Total <strong>R<%= @order.total_price.round %></strong></p>
+      <%= link_to "Checkout", checkout_path, class: "btn btn-success btn-lg" %>
+    </div>
+  <% end %>
+</div>

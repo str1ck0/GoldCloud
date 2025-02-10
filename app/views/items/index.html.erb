@@ -1,0 +1,29 @@
+<div class="header">
+  <div class="container d-flex align-items-center mt-3">
+    <% if user_signed_in? %>
+      <h4>Welcome, <%= current_user.username %></h4>
+    <% else %>
+      <h3>Welcome, Guest</h3>
+    <% end %>
+  </div>
+</div>
+<div class="container mb-navbar mt-header" data-controller="search">
+  <% if current_user.admin? %>
+    <div>
+      <p>You are an admin</p>
+    </div>
+  <% end %>
+  <h1>Latest Products</h1>
+  <%= form_with(url: items_path, method: :get, class: "gc-form", local: true, data: { turbo: false }) do |f| %>
+    <%= f.text_field :query,
+                      class: "form-control gc-form",
+                      placeholder: "Search items...",
+                      data: {
+                        search_target: "input",
+                        action: "input->search#search"
+                      } %>
+  <% end %>
+  <div data-search-target="results">
+    <%= render partial: "items", locals: { items: @items } %>
+  </div>
+</div>

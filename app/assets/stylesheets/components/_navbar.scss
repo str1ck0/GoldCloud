@@ -1,0 +1,20 @@
+// .navbar-goldcloud {
+//   justify-content: space-between;
+//   // background: rgb(0, 0, 0);
+//   position: fixed;
+//   bottom: 0;
+//   width: 100%;
+//   z-index: 1000;
+
+//   a {
+//     color: white;
+//   }
+// }
+
+.navbar-goldcloud .navbar-collapse {
+  flex-grow: 0;
+}
+
+.navbar-goldcloud .navbar-brand img {
+  width: 40px;
+}

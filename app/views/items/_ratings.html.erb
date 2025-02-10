@@ -14,7 +14,7 @@
 			</div>
 			<p class="m-0 text-white-50"><%= rating.comment %></p>
 		</div>
-		<p><%= rating.created_at %></p>
+		<p class="text-white-50"><small><%= time_ago_in_words(rating.created_at) %> ago</small></p>
 		<% if current_user&.role == "admin" %>
 			<div class="ms-auto">
 				<%= link_to "Delete", rating_path(rating), class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this rating?" } %>

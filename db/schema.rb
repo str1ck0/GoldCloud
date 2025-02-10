@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_07_190837) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_10_195111) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -122,6 +122,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_07_190837) do
     t.boolean "available", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "strain_type"
+    t.string "grow_type"
+    t.index ["grow_type"], name: "index_products_on_grow_type"
+    t.index ["strain_type"], name: "index_products_on_strain_type"
   end
 
   create_table "ratings", force: :cascade do |t|

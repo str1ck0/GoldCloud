@@ -17,7 +17,7 @@
   <%= form_with(url: items_path, method: :get, class: "gc-form", local: true, data: { turbo: false }) do |f| %>
     <%= f.text_field :query,
                       class: "form-control gc-form",
-                      placeholder: "Search items...",
+                      placeholder: "Search here",
                       data: {
                         search_target: "input",
                         action: "input->search#search"

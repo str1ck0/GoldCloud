@@ -1,4 +1,7 @@
 class Product < ApplicationRecord
+  STRAIN_TYPES = %w[indica sativa hybrid].freeze
+  GROW_TYPES = %w[indoor greenhouse].freeze
+
   has_one :item, as: :itemable, dependent: :destroy
   has_many :package_products
   has_many :packages, through: :package_products
@@ -12,6 +15,12 @@ class Product < ApplicationRecord
   validates :name, presence: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :available, inclusion: { in: [true, false] }
+
+  validates :strain_type, inclusion: { in: STRAIN_TYPES }, allow_nil: true
+  validates :grow_type, inclusion: { in: GROW_TYPES }, allow_nil: true
+  
+  scope :by_strain_type, ->(type) { where(strain_type: type) }
+  scope :by_grow_type, ->(type) { where(grow_type: type) }
 
   after_create :create_item
 

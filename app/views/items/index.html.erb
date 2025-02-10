@@ -14,15 +14,15 @@
     </div>
   <% end %>
   <h1>Latest Products</h1>
-  <%= form_with(url: items_path, method: :get, class: "gc-form", local: true, data: { turbo: false }) do |f| %>
+  <%= form_with(url: search_items_path, method: :get, class: "gc-form", local: true, data: { turbo: false }) do |f| %>
     <%= f.text_field :query,
                       class: "form-control gc-form",
-                      placeholder: "Search here",
+                      placeholder: "Search by name, strain, or grow type...",
                       data: {
                         search_target: "input",
                         action: "input->search#search"
                       } %>
-  <% end %>
+    <% end %>
   <div data-search-target="results">
     <%= render partial: "items", locals: { items: @items } %>
   </div>

@@ -1,6 +1,7 @@
 class Item < ApplicationRecord
   belongs_to :itemable, polymorphic: true
-  has_many :ratings, dependent: :destroy
+  has_many :ratings, -> { order(created_at: :desc) }, dependent: :destroy
+
 
   # package instance methods
   delegate :add_product, :remove_product, :product_quantity, to: :itemable, allow_nil: true
@@ -13,7 +14,7 @@ class Item < ApplicationRecord
   end
 
   def average_rating
-    avg = ratings.where(hidden: false).average(:score)
+    avg = ratings.where(hidden: !true).average(:score)
     avg&.round(1) || 0.0
   end
 

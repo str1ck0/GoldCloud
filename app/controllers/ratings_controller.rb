@@ -5,8 +5,9 @@ class RatingsController < ApplicationController
 
   def create
     @rating = current_user.ratings.build(rating_params)
+    @rating.hidden = false;
     if @rating.save
-      redirect_to item_path(@rating.item), notice: 'Rating added!'
+      redirect_to item_path(@rating.item), notice: 'Review added!'
     else
       redirect_to item_path(@rating.item), alert: @rating.errors.full_messages.join(', ')
     end

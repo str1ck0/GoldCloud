@@ -12,7 +12,7 @@
         <% @orders.each do |order| %>
           <% unless order.status == "created" %>
               <div class="order-card py-3">
-                <p><strong>Order Number:</strong> <%= order.id %></p>
+                <h2>Order <%= order.id %></h2>
                 <p><strong>Created:</strong> <%= order.created_at.strftime("%d/%m/%Y %H:%M") %></p>
                 <p><strong>Status:</strong> <%= order.status.titleize %></p>
                 <p><strong>Total:</strong> R <%= order.total_price %></p>

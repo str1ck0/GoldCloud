@@ -1,8 +1,9 @@
 <div class="container mt-5">
-  <h1>Order Confirmed!</h1>
-  <p>Thank you for your order. Your order number is <%= @order.id %></p>
+  <h1 class="mb-3">Order Confirmed!</h1>
+  <p>Thank you for your order!</p>
+  <p class="border-bottom pb-3 m-0">Your order number is <%= @order.id %></p>
 
-  <div class="mt-4">
+  <div>
     <% @order.order_items.each do |order_item| %>
       <div class="cart-product-card pe-3">
         <div class="d-flex flex-grow-1 align-items-center">

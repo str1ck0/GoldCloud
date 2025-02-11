@@ -1,4 +1,3 @@
-<p>
-  R<%= item.itemable.price.round %>
-  <%= item.itemable_type == 'Product' ? '/ gram' : '' %>
+<p class="fs-4">
+  R<%= item.itemable.price.round %><small><%= item.itemable_type == 'Product' ? ' /gram' : '' %></small>
 </p>

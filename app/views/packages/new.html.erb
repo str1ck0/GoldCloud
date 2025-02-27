@@ -1,5 +1,15 @@
-<div class="container my-5">
-  <h1 class="text-center">Add New Package</h1>
+
+<div class="page-header pt-5 pb-3">
+  <div class="container d-flex align-items-center">
+    <%= link_to items_path do %>
+      <i class="fas fa-arrow-left me-2"></i>
+    <% end %>
+    <h1 class="m-0">Add New Package</h1>
+  </div>
+</div>
+
+
+<div class="container page-content mb-navbar">
 
   <%= simple_form_for @package do |f| %>
     <%= f.input :name, required: false %>
@@ -64,6 +74,6 @@
     <%= f.input :description %>
     <%= f.input :price, required: false %>
     <%= f.input :photos, as: :file, input_html: { multiple: true } %>
-    <%= f.submit "Add Package", class: "btn btn-success mt-1" %>
+    <%= f.submit "Create Package", class: "btn btn-success mt-1" %>
   <% end %>
 </div>

@@ -1,14 +1,16 @@
-<div class="container mb-navbar mt-5">
-  <div class="d-flex align-items-center mb-3">
+<div class="container page-header pt-5 pb-3 border-bottom">
+  <div class="d-flex align-items-center">
     <%= link_to :back do %>
       <i class="fas fa-arrow-left me-2"></i>
     <% end %>
-    <h1 class="m-0">My Orders</h1>
+    <h1 class="m-0">Your Orders</h1>
   </div>
+</div>
 
+<div class="container mb-navbar page-content">
   <div>
     <% if @orders.any? %>
-      <div class="border-top">
+      <div>
         <% @orders.each do |order| %>
           <% unless order.status == "created" %>
               <div class="order-card py-3">

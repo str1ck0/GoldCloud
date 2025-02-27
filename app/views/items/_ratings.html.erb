@@ -44,8 +44,8 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 
-				<div class="modal-body">
-					<%= form_with(model: Rating.new, local: true) do |f| %>
+				<%= form_with(model: Rating.new, local: true) do |f| %>
+					<div class="modal-body">
 						<%= f.hidden_field :item_id, value: item.id %>
 						
 						<div class="mb-3">

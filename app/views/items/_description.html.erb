@@ -1,10 +1,22 @@
-<div class="product-description" data-controller="toggle">
-  <p data-action="click->toggle#toggle" data-toggle-target="button" class="text-success">Show Description</p>
+<div data-controller="toggle">
+  <div class="product-description d-flex justify-content-between">
+    <p data-action="click->toggle#toggle" data-toggle-target="button" class="text-success">Show Description</p>
+    <div class="rating">
+      <% item.average_rating.to_i.times do %>
+        <i class="bi bi-star-fill text-warning"></i>
+      <% end %>
+      <% (5 - item.average_rating.to_i).times do %>
+        <i class="bi bi-star text-warning"></i>
+      <% end %>
+      <span class="ms-1">(<%= item.ratings.where(hidden: false).count %>)</span>
+    </div>
+
+    <% if item.itemable.available == false %>
+      <p class="text-info">This product is currently not available</p>
+    <% end %>
+  </div>
+
   <div data-toggle-target="content" class="hidden">
       <p><%= item.itemable.description %></p>
   </div>
-
-  <% if item.itemable.available == false %>
-    <p class="text-info">This product is currently not available</p>
-  <% end %>
 </div>

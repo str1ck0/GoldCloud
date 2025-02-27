@@ -21,7 +21,7 @@
     <% @orders.each do |order| %>
       <div class="order-card d-flex align-items-center py-3 justify-content-between">
         <div>
-          <p><strong>ID:</strong> <%= order.id %></p>
+          <p><strong>ORDER ID:</strong> <%= order.id %></p>
           <p><strong>CUSTOMER ID:</strong> <%= order.user_id %></p>
           <p><strong>CREATED:</strong> <%= order.created_at.strftime("%d/%m/%Y %H:%M") %></p>
           <%= link_to "See order details", order_path(order), class: "text-success" %>

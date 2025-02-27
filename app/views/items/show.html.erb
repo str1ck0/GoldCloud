@@ -1,5 +1,13 @@
-<div class="container mb-navbar mt-5">
-  <%= render 'header', item: @item %>
+<div class="item-show-header pt-5 pb-3">
+  <div class="container d-flex align-items-center">
+    <%= link_to items_path do %>
+      <i class="fas fa-arrow-left me-2"></i>
+    <% end %>
+    <h1 class="m-0"><%= @item.itemable.name %></h1>
+  </div>
+</div>
+
+<div class="container mb-navbar item-show-content">
 
   <%= render 'carousel', item: @item %>
 
@@ -14,4 +22,5 @@
   <%= render 'actions', item: @item, current_user: current_user %>
 
   <%= render 'ratings', item: @item, current_user: current_user %>
+  
 </div>

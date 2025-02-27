@@ -1,11 +1,11 @@
-<div class="mt-4">
+<div class="mt-5">
 	<div class="pb-3 border-bottom d-flex justify-content-between align-items-center">
 		<h3 class="mb-0"><%= item.itemable_type %> Reviews</h3>
 		<%= link_to "Add a review", "#", class: "text-success", data: { bs_toggle: "modal", bs_target: "#reviewModal" } %>
 	</div>
 
 	<% if @item.ratings.count == 0 %>
-		<p class="text-white-50">No reviews yet...</p>
+		<p class="text-white-50 mt-3">No reviews yet...</p>
 	<% else %>
 		<% @item.ratings.each do |rating| %>
 			<div class="rating-card border-bottom py-3 d-flex justify-content-between">

@@ -1,41 +1,120 @@
-<div class="container mb-navbar mt-header">
-  <div class="d-flex justify-content-between align-items-center">
-    <h1>Chats</h1>
-    <!-- Refresh button -->
-    <%= button_to 'Refresh', chats_path, method: :get, class: 'btn btn-secondary' %>
-  </div>
-
-  <div class="products-grid my-4">
-    <% @chats.each do |chat| %>
-      <%= link_to chat_path(chat) do %>
-        <div class="product-card">
-          <div class="product-infos">
-            <!-- Display the username for admins, or 'Gold Cloud Support' for non-admins -->
-            <% if current_user.admin? %>
-              <p><strong>User:</strong> <%= chat.user.username %></p>
-            <% else %>
-              <p><strong>Support:</strong> Gold Cloud Support</p>
-            <% end %>
-            <p><%= chat.title %></p>
-          </div>
-        </div>
+<div class="page-header pt-5 pb-3">
+  <div class="container d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= link_to items_path do %>
+        <i class="fas fa-arrow-left me-2"></i>
       <% end %>
-    <% end %> <!-- Ensure closing each do block -->
-  </div>
-
-  <!-- Button to trigger modal -->
-  <div class="" data-controller="chat">
-    <button class="btn btn-primary mt-4" data-action="click->chat#openModal">New Chat</button>
-
-    <!-- Modal Structure -->
-    <div id="chatModal" class="modal" data-chat-target="modal" style="display:none;" aria-hidden="true">
-      <div class="modal-content">
-        <h2>New Chat</h2>
-        <label for="chat-title">Enter Order ID or Subject:</label>
-        <input type="text" id="chat-title" data-chat-target="chatTitle" class="form-control" placeholder="Order ID or Chat Subject">
-        <button class="btn btn-primary mt-2" data-action="click->chat#createChat">Create Chat</button>
-        <button class="btn btn-secondary mt-2" data-action="click->chat#closeModal">Cancel</button>
-      </div>
+      <h1 class="m-0">
+        <% if current_user.admin? %>
+          Customer Support
+        <% else %>
+          My Chats
+        <% end %>
+      </h1>
     </div>
+    <% unless current_user.admin? %>
+      <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#chatModal">
+        <i class="fas fa-plus me-1"></i>New Chat
+      </button>
+    <% end %>
   </div>
 </div>
+
+<div class="container mb-navbar page-content">
+  <% if @chats.any? %>
+    <div class="row">
+      <% @chats.each do |chat| %>
+        <div class="col-12 mb-3">
+          <%= link_to chat_path(chat), class: "text-decoration-none" do %>
+            <div class="card bg-dark border-secondary h-100 hover-card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="flex-grow-1">
+                    <h5 class="card-title text-white mb-2">
+                      <i class="fas fa-comment me-2"></i>
+                      <%= chat.title %>
+                    </h5>
+                    <p class="card-text text-secondary mb-1">
+                      <% if current_user.admin? %>
+                        <i class="fas fa-user me-1"></i>
+                        Customer: <strong class="text-white"><%= chat.user.username %></strong>
+                      <% else %>
+                        <i class="fas fa-headset me-1"></i>
+                        <span class="text-white">Gold Cloud Support</span>
+                      <% end %>
+                    </p>
+                    <% latest_message = chat.messages.order(:timestamp).last %>
+                    <% if latest_message %>
+                      <p class="card-text text-white-50 small mb-1">
+                        <strong><%= latest_message.user.username %>:</strong> 
+                        <%= truncate(latest_message.content, length: 50) %>
+                      </p>
+                      <small class="text-white-50">
+                        <i class="fas fa-clock me-1"></i>
+                        <%= time_ago_in_words(latest_message.timestamp) %> ago
+                      </small>
+                    <% else %>
+                      <p class="card-text text-white-50 small">No messages yet</p>
+                    <% end %>
+                  </div>
+                  <div class="ms-3">
+                    <i class="fas fa-chevron-right text-muted"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <i class="fas fa-comments fa-4x text-muted mb-3"></i>
+      <h3 class="text-muted">No chats yet</h3>
+      <% if current_user.admin? %>
+        <p class="text-white-50">Customer chats will appear here when they contact admin.</p>
+      <% else %>
+        <p class="text-white-50">Start a conversation with our support team!</p>
+        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#chatModal">
+          <i class="fas fa-plus me-1"></i>Start New Chat
+        </button>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- New Chat Modal -->
+  <% unless current_user.admin? %>
+    <!-- Modal Structure -->
+    <div id="chatModal" class="modal fade" data-bs-theme="dark" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="chatModalLabel">Start New Chat</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <%= form_with(model: Chat.new, local: true) do |f| %>
+            <div class="modal-body">
+              <%= f.label :title, "Subject or Order ID:", class: "form-label" %>
+              <%= f.text_field :title, class: "form-control", placeholder: "e.g., Order #1234 - Missing item", required: true %>
+              <div class="form-text">Describe your issue or include an order number for faster support.</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <%= f.submit "Start Chat", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .hover-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .hover-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+</style>

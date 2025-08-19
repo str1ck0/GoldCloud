@@ -1,0 +1,17 @@
+.star-rating {
+  display: flex;
+  gap: 10px;
+}
+
+.star-rating i {
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+// .star-rating i:hover {
+//   transform: scale(1.1);
+// }
+
+.star-rating i:hover ~ i {
+  opacity: 0.5;
+}

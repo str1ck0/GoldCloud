@@ -1,0 +1,11 @@
+<div class="mb-3 <%= message.user == current_user ? 'text-end' : 'text-start' %>" id="message_<%= message.id %>">
+  <div class="d-inline-block message-content <%= message.user == current_user ? 'bg-primary text-white' : 'bg-secondary text-white' %>" style="max-width: 70%; border-radius: 18px; padding: 12px 16px; word-break: break-word; overflow-wrap: break-word;">
+    <div class="message-text" style="word-break: break-word; overflow-wrap: break-word;"><%= simple_format(message.content) %></div>
+    <div class="message-meta mt-1">
+      <small class="text-muted d-block">
+        <strong><%= message.user.username %></strong>
+        • <%= message.timestamp.strftime("%-I:%M%p") %>
+      </small>
+    </div>
+  </div>
+</div>

@@ -1,33 +1,78 @@
-<div class="container mb-navbar mt-header">
-  <div class="d-flex justify-content-between align-items-center">
-    <h1><%= @chat.title %></h1>
-    <%= button_to 'Refresh', chat_path(@chat), method: :get, class: 'btn btn-secondary' %>
-  </div>
-
-  <div class="messages-list my-4">
-    <% @messages.each do |message| %>
-      <div class="message">
-        <strong><%= message.user.name %>:</strong>
-        <p><%= message.content %></p>
-        <span class="text-muted">
-          Sent at: <%= message.timestamp.strftime("%Y-%m-%d %H:%M:%S") %>
-        </span>
+<div class="d-flex flex-column vh-100" data-controller="chat" data-chat-chat-id-value="<%= @chat.id %>">
+  <!-- Chat Header -->
+  <div class="chat-header bg-black border-bottom p-3 flex-shrink-0 position-fixed w-100" style="top: 0; z-index: 1000;">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <%= link_to chats_path, class: "text-white me-3" do %>
+          <i class="fas fa-arrow-left"></i>
+        <% end %>
+        <h5 class="m-0 text-white"><%= truncate(@chat.title, length: 30) %></h5>
       </div>
-    <% end %>
-  </div>
-
-  <div class="new-message-form my-4">
-    <%= form_with(model: [@chat, Message.new], local: true) do |f| %>
-      <div class="form-group">
-        <%= f.text_area :content, rows: 3, class: "form-control", placeholder: "Type your message..." %>
+      <div class="d-flex gap-2">
+        <% if current_user.admin? %>
+          <%= button_to "End", chat_path(@chat), method: :delete, class: "btn btn-outline-danger btn-sm", data: { confirm: "End this chat?" } %>
+        <% end %>
       </div>
-      <%= f.submit "Send Message", class: "btn btn-primary mt-2" %>
-    <% end %>
-  </div>
-
-  <% if current_user.admin? %>
-    <div class="end-chat">
-      <%= button_to "End Chat", chat_path(@chat), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to end this chat?" } %>
     </div>
-  <% end %>
+  </div>
+
+  <!-- Messages Container -->
+  <div class="flex-grow-1 d-flex flex-column min-h-0" style="margin-top: 76px;">
+    <div id="messages" class="messages-container flex-grow-1 overflow-auto p-3 pb-5" style="background-color: #0d1117; margin-bottom: 76px;">
+      <% if @messages.any? %>
+        <% @messages.each do |message| %>
+          <%= render 'message', message: message, current_user: current_user %>
+        <% end %>
+      <% else %>
+        <div class="text-center text-muted py-5">
+          <i class="fas fa-comments fa-3x mb-3"></i>
+          <p>No messages yet. Start the conversation!</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Message Input -->
+    <div class="message-input-container bg-black border-top p-3 flex-shrink-0 position-fixed w-100" style="bottom: 0; z-index: 1000;">
+      <%= form_with(model: [@chat, Message.new], local: false, id: "message-form", data: { action: "ajax:success->chat#messageSubmitted turbo:submit-end->chat#clearForm" }, class: "d-flex gap-2") do |f| %>
+        <%= f.text_area :content, rows: 1, class: "form-control flex-grow-1", placeholder: "Type your message...", required: true, data: { action: "keydown->chat#handleKeydown", chat_target: "messageInput" }, style: "resize: none; min-height: 40px; max-height: 120px;" %>
+        <%= f.submit "Send", class: "btn btn-primary", data: { chat_target: "submitButton" } %>
+      <% end %>
+    </div>
+  </div>
 </div>
+
+<style>
+  .messages-container {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  
+  .message-content {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto;
+    max-width: 70% !important;
+  }
+  
+  .message-text {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: pre-wrap;
+  }
+  
+  .message-text p {
+    margin-bottom: 0.5rem !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  .message-text p:last-child {
+    margin-bottom: 0 !important;
+  }
+  
+  @media (max-width: 768px) {
+    .message-content {
+      max-width: 85% !important;
+    }
+  }
+</style>

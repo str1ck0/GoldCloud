@@ -7,15 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <% if user_signed_in? %>
+      <meta name="current-user-id" content="<%= current_user.id %>">
+    <% end %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
   </head>
 
-  <body class="pb-5">
-    <%= render "shared/flashes" %>
+  <body class="<%= 'pb-5' unless controller_name == 'chats' && action_name == 'show' %>">
+    <%= render "shared/flashes" unless controller_name == 'chats' && action_name == 'show' %>
     <%= yield %>
-    <%= render 'shared/navbar' unless !user_signed_in? %>
+    <%= render 'shared/navbar' unless !user_signed_in? || (controller_name == 'chats' && action_name == 'show') %>
   </body>
 </html>

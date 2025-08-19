@@ -78,7 +78,5 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: gold_cloud_production
-  username: gold_cloud
-  password: <%= ENV["GOLD_CLOUD_DATABASE_PASSWORD"] %>
+  adapter: sqlite3
+  database: db/production.sqlite3

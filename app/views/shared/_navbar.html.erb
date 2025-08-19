@@ -24,7 +24,7 @@
       <% end %>
 
       <div class="nav-item dropup">
-        <button class="btn p-0 border-0 bg-transparent" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn p-0 border-0 bg-transparent" type="button" id="navbarDropdown" data-bs-toggle="dropdown" data-action="click:dropdown#toggle touchend:dropdown#toggle" aria-expanded="false" style="min-width: 44px; min-height: 44px;">
           <%= image_tag "user_profile.jpg", class: "avatar", alt: "dropdown menu" %>
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

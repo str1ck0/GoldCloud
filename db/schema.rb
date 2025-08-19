@@ -11,8 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2025_08_19_051838) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -78,8 +76,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_19_051838) do
     t.datetime "updated_at", null: false
     t.string "itemable_type"
     t.bigint "itemable_id"
-    t.jsonb "item_snapshot"
-    t.index ["item_snapshot"], name: "index_order_items_on_item_snapshot", using: :gin
+    t.json "item_snapshot"
     t.index ["itemable_type", "itemable_id"], name: "index_order_items_on_itemable"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["package_id"], name: "index_order_items_on_package_id"

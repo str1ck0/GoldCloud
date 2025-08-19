@@ -11,6 +11,9 @@ Rails.application.configure do
   # and those relying on copy on write to perform better.
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
+  
+  # Disable SQLite production warning for mobile-first apps
+  config.active_record.sqlite3_production_warning = false
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local = false
@@ -26,8 +29,8 @@ Rails.application.configure do
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
 
-  # Do not fall back to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  # Allow fallback to assets pipeline for missing precompiled assets
+  config.assets.compile = true
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -66,6 +69,13 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
+  
+  # Configure session store for production
+  config.session_store :cookie_store, 
+    key: '_goldcloud_session',
+    secure: Rails.env.production?,
+    httponly: true,
+    same_site: :lax
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
@@ -73,8 +83,8 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  ## NEED TO CONFIGURE THIS WITH ACTUAL HOST NAME FOR PRODUCTION
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  ## Configure mailer for production
+  config.action_mailer.default_url_options = { host: 'goldcloud.fly.dev', protocol: 'https' }
 
 
   # Ignore bad email addresses and do not raise email delivery errors.
@@ -92,12 +102,11 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
+  config.hosts = [
+    "goldcloud.fly.dev",     # Allow requests from Fly.io domain
+    /.*\.fly\.dev/           # Allow requests from all Fly.io subdomains
+  ]
   # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-  #
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
 end

@@ -21,28 +21,56 @@ class Item < ApplicationRecord
   def self.search(query)
     return all unless query.present?
     
+    # Database-agnostic search method
+    # Works with both SQLite (LIKE) and PostgreSQL (ILIKE)
     itemable_types = ['Product', 'Package']
+    
+    # Determine if we're using PostgreSQL or SQLite
+    like_operator = ActiveRecord::Base.connection.adapter_name.downcase == 'postgresql' ? 'ILIKE' : 'LIKE'
+    search_term = "%#{query}%"
   
     conditions = itemable_types.map do |type|
       if type == 'Product'
-        [
-          "products.name ILIKE :query",
-          "products.description ILIKE :query",
-          "products.strain_type ILIKE :query",
-          "products.grow_type ILIKE :query"
-        ].join(' OR ')
+        if like_operator == 'LIKE'
+          # SQLite: case insensitive using LOWER
+          [
+            "LOWER(products.name) LIKE LOWER(?)",
+            "LOWER(products.description) LIKE LOWER(?)", 
+            "LOWER(products.strain_type) LIKE LOWER(?)",
+            "LOWER(products.grow_type) LIKE LOWER(?)"
+          ].join(' OR ')
+        else
+          # PostgreSQL: use ILIKE for case insensitive
+          [
+            "products.name ILIKE ?",
+            "products.description ILIKE ?",
+            "products.strain_type ILIKE ?",
+            "products.grow_type ILIKE ?"
+          ].join(' OR ')
+        end
       else
-        [
-          "packages.name ILIKE :query",
-          "packages.description ILIKE :query"
-        ].join(' OR ')
+        if like_operator == 'LIKE'
+          # SQLite: case insensitive using LOWER
+          [
+            "LOWER(packages.name) LIKE LOWER(?)",
+            "LOWER(packages.description) LIKE LOWER(?)"
+          ].join(' OR ')
+        else
+          # PostgreSQL: use ILIKE for case insensitive
+          [
+            "packages.name ILIKE ?",
+            "packages.description ILIKE ?"
+          ].join(' OR ')
+        end
       end
     end.join(' OR ')
   
-    joins_clause = itemable_types.map do |type|
-      "LEFT JOIN #{type.tableize} ON items.itemable_type = '#{type}' AND items.itemable_id = #{type.tableize}.id"
-    end.join(' ')
-  
-    joins(joins_clause).where(conditions, query: "%#{query}%")
+    # Use explicit joins for better database compatibility
+    joins("LEFT JOIN products ON items.itemable_type = 'Product' AND items.itemable_id = products.id")
+      .joins("LEFT JOIN packages ON items.itemable_type = 'Package' AND items.itemable_id = packages.id")
+      .where(conditions, 
+        search_term, search_term, search_term, search_term,  # for products
+        search_term, search_term                              # for packages
+      )
   end
 end

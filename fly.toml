@@ -1,0 +1,35 @@
+# fly.toml app configuration file for goldcloud
+# Optimized for South African users
+
+app = 'goldcloud'
+primary_region = 'jnb'  # Johannesburg - in South Africa
+
+[build]
+
+[env]
+  PORT = '3000'
+  RAILS_ENV = 'production'
+  RAILS_SERVE_STATIC_FILES = 'true'
+  RAILS_LOG_TO_STDOUT = 'true'
+  RAILS_ENABLE_CACHING = 'true'
+
+[metrics]
+  port = 9090
+  path = "/metrics"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  memory = '4gb'
+  cpu_kind = 'performance'  
+  cpus = 2
+
+[[statics]]
+  guest_path = '/rails/public'
+  url_prefix = '/'

@@ -1,12 +1,33 @@
 <% if notice %>
-  <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    <%= notice.html_safe %>
+  <div class="alert alert-info alert-dismissible fade show" role="alert" data-controller="flash" data-flash-auto-dismiss-value="5000" id="flash-notice">
+    <span><%= notice.html_safe %></span>
+    <button type="button" class="btn-close" data-action="click:flash#dismiss touchend:flash#dismiss" onclick="this.parentElement.remove()" aria-label="Close"></button>
   </div>
 <% end %>
 <% if alert %>
-  <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    <%= alert.html_safe %>
+  <div class="alert alert-warning alert-dismissible fade show" role="alert" data-controller="flash" data-flash-auto-dismiss-value="5000" id="flash-alert">
+    <span><%= alert.html_safe %></span>
+    <button type="button" class="btn-close" data-action="click:flash#dismiss touchend:flash#dismiss" onclick="this.parentElement.remove()" aria-label="Close"></button>
   </div>
 <% end %>
+
+<script>
+// Fallback JavaScript for flash messages if Stimulus doesn't load
+document.addEventListener('DOMContentLoaded', function() {
+  // Auto-dismiss flash messages after 5 seconds
+  const flashMessages = document.querySelectorAll('[id^="flash-"]');
+  flashMessages.forEach(function(flash) {
+    setTimeout(function() {
+      if (flash && flash.parentElement) {
+        flash.style.transition = 'opacity 0.3s ease-out';
+        flash.style.opacity = '0';
+        setTimeout(function() {
+          if (flash && flash.parentElement) {
+            flash.remove();
+          }
+        }, 300);
+      }
+    }, 5000);
+  });
+});
+</script>

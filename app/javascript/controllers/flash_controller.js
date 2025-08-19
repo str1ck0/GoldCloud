@@ -4,6 +4,9 @@ export default class extends Controller {
   static values = { autoDismiss: Number }
 
   connect() {
+    // Add class to body when flash messages are present
+    document.body.classList.add('has-flash')
+    
     // Auto-dismiss after specified time (default 5 seconds)
     if (this.autoDismissValue > 0) {
       this.timeout = setTimeout(() => {
@@ -35,6 +38,10 @@ export default class extends Controller {
     
     setTimeout(() => {
       this.element.remove()
+      // Remove body class when no flash messages remain
+      if (document.querySelectorAll('[id^="flash-"]').length === 0) {
+        document.body.classList.remove('has-flash')
+      }
     }, 300)
   }
 

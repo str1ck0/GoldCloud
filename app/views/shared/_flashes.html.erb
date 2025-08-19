@@ -14,8 +14,13 @@
 <script>
 // Fallback JavaScript for flash messages if Stimulus doesn't load
 document.addEventListener('DOMContentLoaded', function() {
-  // Auto-dismiss flash messages after 5 seconds
+  // Add class to body when flash messages are present
   const flashMessages = document.querySelectorAll('[id^="flash-"]');
+  if (flashMessages.length > 0) {
+    document.body.classList.add('has-flash');
+  }
+  
+  // Auto-dismiss flash messages after 5 seconds
   flashMessages.forEach(function(flash) {
     setTimeout(function() {
       if (flash && flash.parentElement) {
@@ -24,6 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
           if (flash && flash.parentElement) {
             flash.remove();
+            // Remove body class when no flash messages remain
+            if (document.querySelectorAll('[id^="flash-"]').length === 0) {
+              document.body.classList.remove('has-flash');
+            }
           }
         }, 300);
       }

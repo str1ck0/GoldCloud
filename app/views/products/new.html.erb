@@ -3,7 +3,7 @@
   <%= simple_form_for @product do |f| %>
     <%= f.input :name, required: false %>
     <%= f.input :description %>
-    <%= f.input :price, required: false %>
+    <%= f.input :price, required: false, label: 'Price per gram', placeholder: "R" %>
     <%= f.input :photos, as: :file, input_html: { multiple: true } %>
     <%= f.submit "Add Product", class: "btn btn-success mt-3" %>
   <% end %>

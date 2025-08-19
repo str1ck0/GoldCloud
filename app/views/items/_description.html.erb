@@ -1,6 +1,10 @@
 <div data-controller="toggle">
-  <div class="product-description d-flex justify-content-between">
-    <p data-action="click->toggle#toggle" data-toggle-target="button" class="text-success">Show Description</p>
+  <div class="product-description d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center">
+      <p data-action="click->toggle#toggle" data-toggle-target="button" class="text-success m-0">Show Description</p>
+      <i class="fa-solid fa-chevron-down ms-1 text-success"></i>
+    </div>
+
     <div class="rating">
       <% item.average_rating.to_i.times do %>
         <i class="bi bi-star-fill text-warning"></i>

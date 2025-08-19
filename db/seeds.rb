@@ -30,11 +30,12 @@ stricko = User.create!(
   role: 2
 )
 
-test_users = 5.times.map do |i|
+test_users = 3.times.map do |i|
   User.create!(
     email: "user#{i}@example.com",
     password: "password",
-    username: "User#{i}"
+    username: "User#{i}",
+    role: 2
   )
 end
 
@@ -106,7 +107,7 @@ puts "Created #{Package.count} packages."
 # Simulate shopping history
 puts "Creating order history..."
 test_users.each do |user|
-  5.times do
+  3.times do
     # Create an order
     order = Order.create!(
       user: user,

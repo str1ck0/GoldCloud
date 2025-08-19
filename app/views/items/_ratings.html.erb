@@ -1,7 +1,15 @@
 <div class="mt-5">
 	<div class="pb-3 border-bottom d-flex justify-content-between align-items-center">
 		<h3 class="mb-0"><%= item.itemable_type %> Reviews</h3>
-		<%= link_to "Add a review", "#", class: "text-success", data: { bs_toggle: "modal", bs_target: "#reviewModal" } %>
+		<% user_rating = current_user&.ratings&.find_by(item: item) %>
+		<% can_rate = current_user&.orders&.delivered&.joins(:order_items)&.where(order_items: { itemable: item.itemable })&.exists? %>
+		<% if can_rate %>
+			<% if user_rating %>
+				<%= link_to "Edit your review", "#", class: "text-warning", data: { bs_toggle: "modal", bs_target: "#reviewModal" } %>
+			<% else %>
+				<%= link_to "Add a review", "#", class: "text-success", data: { bs_toggle: "modal", bs_target: "#reviewModal" } %>
+			<% end %>
+		<% end %>
 	</div>
 
 	<% if @item.ratings.count == 0 %>
@@ -34,45 +42,57 @@
 		<% end %>
 	<% end %>
 
+	<% if can_rate %>
 		<!-- Review Modal -->
-	<div class="modal fade" data-bs-theme="dark" id="reviewModal" data-controller="review-modal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				
-				<div class="modal-header">
-					<h5 class="modal-title" id="reviewModalLabel">Add Your Review for <%= @item.itemable.name %></h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
+		<div class="modal fade" data-bs-theme="dark" id="reviewModal" data-controller="review-modal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					
+					<div class="modal-header">
+						<h5 class="modal-title" id="reviewModalLabel">
+							<% if user_rating %>
+								Edit Your Review for <%= @item.itemable.name %>
+							<% else %>
+								Add Your Review for <%= @item.itemable.name %>
+							<% end %>
+						</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
 
-				<%= form_with(model: Rating.new, local: true) do |f| %>
-					<div class="modal-body">
-						<%= f.hidden_field :item_id, value: item.id %>
-						
-						<div class="mb-3">
-							<label class="form-label">Rating</label>
-							<div class="rating-input">
-								<% 5.times do |i| %>
-									<div class="form-check form-check-inline">
-										<%= f.radio_button :score, i + 1, class: "form-check-input", required: true %>
-										<%= f.label "score_#{i + 1}", (i + 1).to_s, class: "form-check-label" %>
-									</div>
-								<% end %>
+					<%= form_with(model: Rating.new, local: true) do |f| %>
+						<div class="modal-body">
+							<%= f.hidden_field :item_id, value: item.id %>
+							<%= f.hidden_field :score, value: user_rating&.score, data: { review_modal_target: "scoreInput" } %>
+							
+							<div class="mb-3">
+								<label class="form-label">Rating</label>
+								<div class="star-rating">
+									<% 5.times do |i| %>
+										<i class="bi bi-star<%= (user_rating&.score && i < user_rating.score) ? '-fill' : '' %> fs-3 text-warning" 
+											data-value="<%= i+1 %>" 
+											data-action="click->review-modal#setRating"
+											data-review-modal-target="star"></i>
+									<% end %>
+								</div>
+								<div class="text-danger mt-1" data-review-modal-target="ratingError" style="display: none;">
+									Please select a rating
+								</div>
+							</div>
+
+							<div class="mb-3">
+								<%= f.label :comment, "Your Review", class: "form-label" %>
+								<%= f.text_area :comment, value: user_rating&.comment, class: "form-control", rows: 4, required: true %>
 							</div>
 						</div>
 
-						<div class="mb-3">
-							<%= f.label :comment, "Your Review", class: "form-label" %>
-							<%= f.text_area :comment, class: "form-control", rows: 4, required: true %>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<%= f.submit (user_rating ? "Update Review" : "Submit Review"), class: "btn btn-primary", data: { action: "click->review-modal#validateRating" } %>
 						</div>
-					</div>
-
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<%= f.submit "Submit Review", class: "btn btn-primary" %>
-					</div>
-				<% end %>
+					<% end %>
+				</div>
 			</div>
 		</div>
-	</div>
+	<% end %>
 
 </div>

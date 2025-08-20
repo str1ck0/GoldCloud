@@ -78,8 +78,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_20_044040) do
     t.datetime "updated_at", null: false
     t.string "itemable_type"
     t.bigint "itemable_id"
-    t.jsonb "item_snapshot"
-    t.index ["item_snapshot"], name: "index_order_items_on_item_snapshot", using: :gin
+    t.text "item_snapshot"
+    t.index ["item_snapshot"], name: "index_order_items_on_item_snapshot"
     t.index ["itemable_type", "itemable_id"], name: "index_order_items_on_itemable"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["package_id"], name: "index_order_items_on_package_id"

@@ -5,6 +5,7 @@ class OrderItem < ApplicationRecord
   validates :order, presence: true
   validates :quantity, presence: true, numericality: { greater_than: 0 }
 
+  serialize :item_snapshot, coder: JSON
   before_create :store_item_snapshot
 
   def store_item_snapshot

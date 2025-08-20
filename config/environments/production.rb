@@ -73,9 +73,10 @@ Rails.application.configure do
   # Configure session store for production
   config.session_store :cookie_store, 
     key: '_goldcloud_session',
-    secure: Rails.env.production?,
+    secure: true,
     httponly: true,
-    same_site: :lax
+    same_site: :lax,
+    expire_after: 2.weeks
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque

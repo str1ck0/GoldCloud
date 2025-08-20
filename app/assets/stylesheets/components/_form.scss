@@ -1,19 +1,99 @@
+// Base dark form styling (no border, for search inputs etc)
 .gc-form {
   display: flex;
   flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
 
-  background-color: transparent !important;
-  color: rgba(255, 255, 255, 0.5) !important;
-
-  ::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
   }
   
   &:focus {
-    background-color: transparent !important;
-    color: rgba(255, 255, 255, 0.5) !important;
-    box-shadow: none !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    color: rgba(255, 255, 255, 1) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  }
+}
+
+// Apply gc-form styling to all form controls in search wrappers
+.search-input-wrapper .form-control,
+.address-autocomplete-wrapper .form-control {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    color: rgba(255, 255, 255, 1) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  }
+}
+
+// Style chat message input and ratings textarea
+.message-input-container .form-control,
+.rating-modal .form-control {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    color: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  }
+}
+
+// Specific styling for account page forms that need visible borders
+.account-form-input.gc-form {
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  
+  &:focus {
+    border-color: rgba(255, 255, 255, 0.6) !important;
   }
 }
 

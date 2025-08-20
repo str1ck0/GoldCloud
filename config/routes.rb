@@ -25,6 +25,14 @@ Rails.application.routes.draw do
   get 'cart', to: 'orders#cart'
   get 'checkout', to: 'orders#checkout'
   get 'account', to: 'pages#account', as: 'account'
+  
+  # User account management
+  patch 'account/update_password', to: 'pages#update_password', as: 'update_password'
+  patch 'account/update_username', to: 'pages#update_username', as: 'update_username'
+  delete 'account/delete', to: 'pages#delete_account', as: 'delete_account'
+  
+  # Admin driver management
+  post 'account/create_driver', to: 'pages#create_driver', as: 'create_driver'
 
   resources :orders do
     member do

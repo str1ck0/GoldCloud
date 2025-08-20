@@ -13,7 +13,6 @@ Package.destroy_all
 # 1. king user (admin)
 admin = User.create!(
   username: "The Duke",
-  address: "admin@goldcloud.com",
   email: "test@test.com",
   password: "password",
   password_confirmation: "password",
@@ -23,7 +22,6 @@ admin = User.create!(
 # 2. create some customers
 stricko = User.create!(
   username: "Stricko",
-  address: "456 False Road, Faketown, 5678",
   email: "fake@fake.com",
   password: "password",
   password_confirmation: "password",
@@ -42,7 +40,6 @@ end
 # 3. Create some drivers
 driver1 = User.create!(
   username: "Driver 1",
-  address: "99 Madeup Corner, Faketown, 3378",
   email: "fake@driver.com",
   password: "password",
   password_confirmation: "password",
@@ -69,11 +66,16 @@ description_template = "This strain is a hybrid made from a genetic cross betwee
                         or outdoors in mild climates. The average price typically ranges from R120-R180 per gram."
 
 # Seed 20 products
+strain_types = ['indica', 'sativa', 'hybrid']
+grow_types = ['indoor', 'outdoor', 'greenhouse']
+
 product_names.each do |product_name|
   Product.create!(
     name: product_name,
     description: description_template,
     price: rand(10..20) * 10,
+    strain_type: strain_types.sample,
+    grow_type: grow_types.sample,
     available: true
   )
 end

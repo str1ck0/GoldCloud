@@ -1,0 +1,171 @@
+.address-autocomplete-wrapper {
+  position: relative;
+}
+
+.address-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: rgb(33, 37, 41); // Dark background to match theme
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1060; // Higher than navbar (1040) and flash messages (1050)
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 4px;
+
+  // Show above input when near bottom of screen
+  &.position-above {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 4px;
+  }
+
+  // Custom scrollbar for dark theme
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+  }
+}
+
+.address-suggestion {
+  transition: background-color 0.2s ease;
+  
+  &:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  &:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .bi-geo-alt {
+    color: rgba(255, 255, 255, 0.8); // More visible
+    font-size: 1rem; // Slightly larger
+    flex-shrink: 0;
+  }
+  
+  // Make subtext more readable
+  small {
+    color: rgba(255, 255, 255, 0.7) !important; // More visible than muted
+  }
+}
+
+// Address autocomplete specific styles - completely override any conflicting styles
+.address-autocomplete-wrapper {
+  position: relative;
+  
+  .search-input-wrapper {
+    position: relative;
+    display: block;
+  }
+  
+  // Form control - make sure it has proper height
+  .form-control {
+    height: 48px; // Standard Bootstrap form-control height
+    padding-right: 50px !important; // Make space for icon
+  }
+  
+  // Icon button positioning - calculate from Bootstrap form-control specs
+  .search-icon-btn {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 48px !important;
+    height: 48px !important; // Same as form control height
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    z-index: 5 !important;
+    
+    i {
+      font-size: 16px !important;
+      color: rgba(255, 255, 255, 0.6) !important;
+      line-height: 1 !important;
+    }
+    
+    &:hover i {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+    
+    &:focus {
+      outline: none !important;
+    }
+  }
+}
+
+// Loading state - show spinner in exact center of button area
+.address-autocomplete-wrapper.loading {
+  .search-icon-btn {
+    opacity: 0 !important;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 24px; // Center of 48px button: 48/2 = 24px
+    width: 16px;
+    height: 16px;
+    margin-top: -8px; // Half of spinner height for perfect centering
+    margin-right: -8px; // Half of spinner width for perfect centering
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: rgba(255, 255, 255, 0.8);
+    animation: spin 1s linear infinite;
+    z-index: 10;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// Mobile optimizations
+@media (max-width: 768px) {
+  .address-suggestions {
+    max-height: 250px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .address-suggestion {
+    padding: 12px !important;
+    
+    .fw-medium {
+      font-size: 0.95rem;
+    }
+    
+    small {
+      font-size: 0.8rem;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<% if item.itemable_type == "Product" && (item.itemable.strain_type.present? || item.itemable.grow_type.present?) %>
+  <div class="product-info-section mb-4">
+    <div class="row g-3">
+      <% if item.itemable.strain_type.present? %>
+        <div class="col-6">
+          <div class="info-card h-100 p-3 rounded" style="background-color: rgba(33, 37, 41, 0.8); border: 1px solid rgba(255, 255, 255, 0.2);">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-flower1 text-success me-4" style="font-size: 1.6rem;"></i>
+              <div>
+                <p class="text-white-50 mb-0 small">Strain Type</p>
+                <p class="text-white mb-0 fw-semibold text-capitalize"><%= item.itemable.strain_type %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      
+      <% if item.itemable.grow_type.present? %>
+        <div class="col-6">
+          <div class="info-card h-100 p-3 rounded" style="background-color: rgba(33, 37, 41, 0.8); border: 1px solid rgba(255, 255, 255, 0.2);">
+            <div class="d-flex align-items-center">
+              <% case item.itemable.grow_type %>
+                <% when 'indoor' %>
+                  <i class="bi bi-house text-primary me-4" style="font-size: 1.6rem;"></i>
+                <% when 'outdoor' %>
+                  <i class="bi bi-sun text-warning me-4" style="font-size: 1.6rem;"></i>
+                <% when 'greenhouse' %>
+                  <i class="bi bi-building text-info me-4" style="font-size: 1.6rem;"></i>
+              <% end %>
+              <div>
+                <p class="text-white-50 mb-0 small">Grow Type</p>
+                <p class="text-white mb-0 fw-semibold text-capitalize"><%= item.itemable.grow_type %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

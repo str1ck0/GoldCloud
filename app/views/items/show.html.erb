@@ -13,6 +13,8 @@
 
   <%= render 'description', item: @item %>
 
+  <%= render 'product_info', item: @item %>
+
   <% if @item.itemable_type == "Package" %>
     <%= render 'package_items', item: @item %>
   <% end %>

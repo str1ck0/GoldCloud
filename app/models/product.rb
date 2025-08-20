@@ -1,6 +1,6 @@
 class Product < ApplicationRecord
   STRAIN_TYPES = %w[indica sativa hybrid].freeze
-  GROW_TYPES = %w[indoor greenhouse].freeze
+  GROW_TYPES = %w[indoor outdoor greenhouse].freeze
 
   has_one :item, as: :itemable, dependent: :destroy
   has_many :package_products

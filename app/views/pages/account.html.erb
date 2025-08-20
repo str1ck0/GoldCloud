@@ -1,3 +1,141 @@
 <div class="container mb-navbar mt-5">
-  <h1>Your account</h1>
+  <div class="d-flex align-items-center border-bottom pb-3 mb-4">
+    <h1 class="m-0">Your Account</h1>
+    <span class="badge bg-<%= @user.admin? ? 'danger' : @user.driver? ? 'warning' : 'primary' %> ms-3">
+      <%= @user.role.capitalize %>
+    </span>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8">
+      <!-- Account Information -->
+      <div class="card mb-4" style="background-color: rgba(33, 37, 41, 0.95); border: 1px solid rgba(255, 255, 255, 0.3);">
+        <div class="card-header">
+          <h5 class="mb-0 text-white">Account Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-sm-3">
+              <strong class="text-white">Username:</strong>
+            </div>
+            <div class="col-sm-9">
+              <span class="text-light"><%= @user.username %></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <strong class="text-white">Email:</strong>
+            </div>
+            <div class="col-sm-9">
+              <span class="text-light"><%= @user.email %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Change Username -->
+      <div class="card mb-4" style="background-color: rgba(33, 37, 41, 0.95); border: 1px solid rgba(255, 255, 255, 0.3);">
+        <div class="card-header">
+          <h5 class="mb-0 text-white">Change Username</h5>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: @user, url: update_username_path, method: :patch, local: true, class: "d-flex align-items-end gap-3") do |form| %>
+            <div class="flex-grow-1">
+              <%= form.text_field :username, class: "form-control gc-form account-form-input", placeholder: "New username", value: @user.username %>
+            </div>
+            <div>
+              <%= form.submit "Update Username", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Change Password -->
+      <div class="card mb-4" style="background-color: rgba(33, 37, 41, 0.95); border: 1px solid rgba(255, 255, 255, 0.3);">
+        <div class="card-header">
+          <h5 class="mb-0 text-white">Change Password</h5>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: @user, url: update_password_path, method: :patch, local: true) do |form| %>
+            <div class="mb-3">
+              <%= form.password_field :current_password, class: "form-control gc-form account-form-input", placeholder: "Current password", required: true %>
+            </div>
+            <div class="mb-3">
+              <%= form.password_field :password, class: "form-control gc-form account-form-input", placeholder: "New password", required: true %>
+            </div>
+            <div class="mb-3">
+              <%= form.password_field :password_confirmation, class: "form-control gc-form account-form-input", placeholder: "Confirm new password", required: true %>
+            </div>
+            <%= form.submit "Update Password", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @user.admin? %>
+        <!-- Admin: Create Driver -->
+        <div class="card mb-4" style="background-color: rgba(33, 37, 41, 0.95); border: 1px solid rgba(255, 255, 255, 0.3);">
+          <div class="card-header">
+            <h5 class="mb-0 text-white">Create New Driver</h5>
+          </div>
+          <div class="card-body">
+            <%= form_with(url: create_driver_path, method: :post, local: true) do |form| %>
+              <div class="mb-3">
+                <%= form.text_field "new_driver[username]", class: "form-control gc-form account-form-input", placeholder: "Driver username", required: true %>
+              </div>
+              <div class="mb-3">
+                <%= form.email_field "new_driver[email]", class: "form-control gc-form account-form-input", placeholder: "Driver email", required: true %>
+              </div>
+              <div class="mb-3">
+                <%= form.password_field "new_driver[password]", class: "form-control gc-form account-form-input", placeholder: "Driver password", required: true %>
+              </div>
+              <div class="mb-3">
+                <%= form.password_field "new_driver[password_confirmation]", class: "form-control gc-form account-form-input", placeholder: "Confirm driver password", required: true %>
+              </div>
+              <%= form.submit "Create Driver", class: "btn btn-success" %>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <!-- Customer: Delete Account -->
+        <div class="card mb-4" style="background-color: rgba(33, 37, 41, 0.95); border: 1px solid rgba(255, 255, 255, 0.3);">
+          <div class="card-header">
+            <h5 class="mb-0 text-danger">Danger Zone</h5>
+          </div>
+          <div class="card-body">
+            <p class="text-light mb-3">
+              <strong class="text-warning">Warning:</strong> This action cannot be undone. This will permanently delete your account and all associated data.
+            </p>
+            <%= form_with(model: @user, url: delete_account_path, method: :delete, local: true, data: { confirm: "Are you sure you want to delete your account? This action cannot be undone." }) do |form| %>
+              <div class="mb-3">
+                <%= form.password_field :current_password, class: "form-control gc-form account-form-input", placeholder: "Enter your password to confirm", required: true %>
+              </div>
+              <%= form.submit "Delete Account", class: "btn btn-danger" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-lg-4">
+      <!-- Quick Actions -->
+      <div class="card" style="background-color: rgba(33, 37, 41, 0.95); border: 1px solid rgba(255, 255, 255, 0.3);">
+        <div class="card-header">
+          <h5 class="mb-0 text-white">Quick Actions</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <%= link_to "View Orders", orders_path, class: "btn btn-outline-light" %>
+            <% if @user.admin? %>
+              <%= link_to "Manage Items", items_path, class: "btn btn-outline-light" %>
+              <%= link_to "View All Orders", orders_path, class: "btn btn-outline-light" %>
+            <% else %>
+              <%= link_to "Browse Products", items_path, class: "btn btn-outline-light" %>
+              <%= link_to "View Cart", cart_path, class: "btn btn-outline-light" %>
+            <% end %>
+            <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

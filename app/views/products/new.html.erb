@@ -4,6 +4,8 @@
     <%= f.input :name, required: false %>
     <%= f.input :description %>
     <%= f.input :price, required: false, label: 'Price per gram', placeholder: "R" %>
+    <%= f.input :strain_type, collection: Product::STRAIN_TYPES, prompt: 'Select strain type', include_blank: false %>
+    <%= f.input :grow_type, collection: Product::GROW_TYPES, prompt: 'Select grow type', include_blank: false %>
     <%= f.input :photos, as: :file, input_html: { multiple: true } %>
     <%= f.submit "Add Product", class: "btn btn-success mt-3" %>
   <% end %>

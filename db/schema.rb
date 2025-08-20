@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_19_051838) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_20_044040) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -76,7 +78,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_19_051838) do
     t.datetime "updated_at", null: false
     t.string "itemable_type"
     t.bigint "itemable_id"
-    t.json "item_snapshot"
+    t.jsonb "item_snapshot"
+    t.index ["item_snapshot"], name: "index_order_items_on_item_snapshot", using: :gin
     t.index ["itemable_type", "itemable_id"], name: "index_order_items_on_itemable"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["package_id"], name: "index_order_items_on_package_id"
@@ -147,7 +150,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_19_051838) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "role", default: 2, null: false
-    t.string "address"
     t.string "username", default: "", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

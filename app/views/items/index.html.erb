@@ -12,7 +12,7 @@
   <%= form_with(url: search_items_path, method: :get, class: "gc-form", local: false) do |f| %>
     <div class="search-input-wrapper">
       <%= f.text_field :query,
-                        class: "form-control gc-form",
+                        class: "form-control",
                         placeholder: "Search by name, strain, or grow type...",
                         data: {
                           search_target: "input",

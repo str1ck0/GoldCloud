@@ -9,6 +9,8 @@
     <%= f.input :name, required: false %>
     <%= f.input :description %>
     <%= f.input :price, required: false, label: "Price / gram" %>
+    <%= f.input :strain_type, collection: Product::STRAIN_TYPES, prompt: 'Select strain type', include_blank: false %>
+    <%= f.input :grow_type, collection: Product::GROW_TYPES, prompt: 'Select grow type', include_blank: false %>
     <div class="mb-2">
       <% if @product.photos.attached? %>
         <% @product.photos.each do |photo| %>

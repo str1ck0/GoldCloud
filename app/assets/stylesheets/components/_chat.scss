@@ -27,14 +27,13 @@
 
 .messages-container {
   background-color: #0d1117 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
   
   @media (max-width: 768px) {
     padding: 1rem !important;
     padding-bottom: 2rem !important;
-    
-    // Better scrolling on mobile
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
   }
 }
 
@@ -137,7 +136,6 @@
 // Ensure chat takes full screen on mobile
 @media (max-width: 768px) {
   body.chat-page {
-    overflow: hidden;
     padding-bottom: 0 !important;
     
     .vh-100 {

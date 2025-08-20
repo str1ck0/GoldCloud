@@ -28,7 +28,27 @@
   </div>
   <%= form_with(model: @order, url: confirm_order_order_path(@order), method: :patch, local: true) do |form| %>
     <div class="mb-3 gc-form">
-      <%= form.text_field :address, class: "form-control gc-form mb-2", placeholder: "Enter delivery address", required: true %>
+      <div class="address-autocomplete-wrapper" 
+           data-controller="address-autocomplete" 
+           data-address-autocomplete-country-value="ZA"
+           data-action="click@document->address-autocomplete#clickOutside">
+        <div class="search-input-wrapper">
+          <%= form.text_field :address, 
+              class: "form-control mb-2", 
+              placeholder: "Enter delivery address", 
+              required: true,
+              data: { 
+                address_autocomplete_target: "input",
+                action: "input->address-autocomplete#search keydown->address-autocomplete#keydown input->address-autocomplete#updateIcon"
+              } %>
+          <button type="button" class="search-icon-btn" data-address-autocomplete-target="iconBtn" data-action="click->address-autocomplete#handleIconClick">
+            <i class="bi bi-search" data-address-autocomplete-target="icon"></i>
+          </button>
+        </div>
+        <div class="address-suggestions d-none" 
+             data-address-autocomplete-target="dropdown">
+        </div>
+      </div>
       <%= form.submit "Place Order", class: "btn btn-lg btn-success" %>
     </div>
   <% end %>

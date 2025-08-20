@@ -12,6 +12,24 @@
             <p title="<%= item.itemable.name %>">
               <%= truncate(item.itemable.name, length: 20, omission: '...') %>
             </p>
+            <% if item.itemable_type == 'Product' && (item.itemable.strain_type.present? || item.itemable.grow_type.present?) %>
+              <div class="my-1 d-flex gap-1 flex-wrap">
+                <% if item.itemable.strain_type.present? %>
+                  <span class="badge <%= case item.itemable.strain_type
+                    when 'indica' then 'bg-warning text-dark'
+                    when 'sativa' then 'bg-success text-dark'
+                    when 'hybrid' then 'bg-info text-dark'
+                  end %>" style="font-size: 0.65rem;">
+                    <%= item.itemable.strain_type.capitalize %>
+                  </span>
+                <% end %>
+                <% if item.itemable.grow_type.present? %>
+                  <span class="badge bg-secondary" style="font-size: 0.65rem;">
+                    <%= item.itemable.grow_type.capitalize %>
+                  </span>
+                <% end %>
+              </div>
+            <% end %>
             <p id="item-price">
               R<%= item.itemable.price.round%><%= "/g" if item.itemable_type == 'Product' %>
             </p>

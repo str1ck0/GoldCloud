@@ -1,7 +1,14 @@
-<p>Package includes: </p>
+<p>Package includes:</p>
 <% item.itemable.package_products.each do |package_product| %>
-  <div class="cart-product-card">
-    <%= image_tag package_product.product.primary_photo_url, class: "rounded" %>
-    <p><%= package_product.product.name %> x <%= package_product.quantity %>g</p>
-  </div>
+  <%= link_to item_path(package_product.product.item), class: "text-decoration-none" do %>
+    <div class="cart-product-card d-flex align-items-center justify-content-between py-3" style="border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <div class="d-flex align-items-center">
+        <%= image_tag package_product.product.primary_photo_url, class: "rounded me-3" %>
+      </div>
+      <div class="text-end">
+        <p class="mb-1 fw-bold text-white"><%= package_product.product.name %></p>
+        <p class="mb-0 text-white-50 small"><%= package_product.quantity %>g</p>
+      </div>
+    </div>
+  <% end %>
 <% end %>

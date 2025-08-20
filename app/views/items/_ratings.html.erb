@@ -12,13 +12,19 @@
 		<% end %>
 	</div>
 
-	<% if @item.ratings.count == 0 %>
+	<% visible_ratings = current_user&.role == "admin" ? @item.ratings : @item.ratings.where(hidden: false) %>
+	<% if visible_ratings.count == 0 %>
 		<p class="text-white-50 mt-3">No reviews yet...</p>
 	<% else %>
-		<% @item.ratings.each do |rating| %>
-			<div class="rating-card border-bottom py-3 d-flex justify-content-between">
+		<% visible_ratings.each do |rating| %>
+			<div class="rating-card border-bottom py-3 d-flex justify-content-between<%= ' opacity-50' if rating.hidden && current_user&.role == 'admin' %>">
 				<div>
-					<p class="mb-1 fw-bold"><%= rating.user.username %></p>
+					<p class="mb-1 fw-bold">
+						<%= rating.user.username %>
+						<% if rating.hidden && current_user&.role == "admin" %>
+							<span class="badge bg-secondary ms-2">Hidden</span>
+						<% end %>
+					</p>
 					<div class="rating mb-2">
 						<% rating.score.times do %>
 							<i class="bi bi-star-fill text-warning"></i>
@@ -34,7 +40,11 @@
 					<p class="text-white-50"><small><%= time_ago_in_words(rating.created_at) %> ago</small></p>
 					<% if current_user&.role == "admin" %>
 						<div class="ms-auto">
-							<%= link_to "Hide", rating_path(rating), class: "btn btn-sm btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this rating?" } %>
+							<% if rating.hidden %>
+								<%= link_to "Unhide", unhide_rating_path(rating), class: "btn btn-sm btn-success", data: { turbo_method: :patch, turbo_confirm: "Are you sure you want to unhide this rating?" } %>
+							<% else %>
+								<%= link_to "Hide", rating_path(rating), class: "btn btn-sm btn-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to hide this rating? Hidden ratings can be unhidden later." } %>
+							<% end %>
 						</div>
 					<% end %>
 				</div>

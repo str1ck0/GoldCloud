@@ -9,8 +9,16 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :products, only: %i[new create edit update destroy]
-  resources :packages, only: %i[new create edit update destroy]
+  resources :products, only: %i[new create edit update destroy] do
+    member do
+      patch :toggle_availability
+    end
+  end
+  resources :packages, only: %i[new create edit update destroy] do
+    member do
+      patch :toggle_availability
+    end
+  end
 
   resources :order_items, only: %i[create update destroy]
 
@@ -34,5 +42,9 @@ Rails.application.routes.draw do
     resources :messages, only: [:create]
   end
 
-  resources :ratings, only: [:create, :update, :destroy]
+  resources :ratings, only: [:create, :update, :destroy] do
+    member do
+      patch :unhide
+    end
+  end
 end

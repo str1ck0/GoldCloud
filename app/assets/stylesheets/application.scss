@@ -107,6 +107,11 @@ a {
   }
 }
 
+.alert-link {
+  margin-left: 0.5rem;
+  color: white;
+}
+
 // Add top padding to body when flash messages are present
 body.has-flash {
   // padding-top: 50px !important;

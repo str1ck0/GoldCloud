@@ -1,7 +1,7 @@
 class RatingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_rating, only: [:update, :destroy]
-  before_action :authorize_admin, only: [:destroy]
+  before_action :set_rating, only: [:update, :destroy, :unhide]
+  before_action :authorize_admin, only: [:destroy, :unhide]
 
   def create
     # Check if user already has a rating for this item
@@ -37,6 +37,11 @@ class RatingsController < ApplicationController
   def destroy
     @rating.update(hidden: true)
     redirect_to item_path(@rating.item), notice: 'Rating hidden'
+  end
+
+  def unhide
+    @rating.update(hidden: false)
+    redirect_to item_path(@rating.item), notice: 'Rating unhidden'
   end
 
   private

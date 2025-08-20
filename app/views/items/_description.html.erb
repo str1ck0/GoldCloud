@@ -14,11 +14,13 @@
       <% end %>
       <span class="ms-1">(<%= item.ratings.where(hidden: false).count %>)</span>
     </div>
-
-    <% if item.itemable.available == false %>
-      <p class="text-info">This product is currently not available</p>
-    <% end %>
   </div>
+
+  <% if item.itemable.available == false %>
+    <div class="alert alert-warning mb-3">
+      You've marked this <%= item.itemable_type.downcase %> as unavailable
+    </div>
+  <% end %>
 
   <div data-toggle-target="content" class="hidden">
       <p><%= item.itemable.description %></p>

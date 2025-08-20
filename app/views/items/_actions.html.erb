@@ -1,13 +1,35 @@
 <% if current_user&.role == "admin" %>
-  <% if item.itemable_type == "Product" %>
-    <%= link_to "Edit", edit_product_path(item.itemable), class: "btn btn-success" %>
-    <%= link_to "Delete", product_path(item.itemable), class: "btn btn-danger",
-                data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this product?" } %>
-  <% elsif item.itemable_type == "Package" %>
-    <%= link_to "Edit", edit_package_path(item.itemable), class: "btn btn-success" %>
-    <%= link_to "Delete", package_path(item.itemable), class: "btn btn-danger",
-                data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this package?" } %>
-  <% end %>
+  <div class="d-flex gap-2 mb-3">
+    <% if item.itemable_type == "Product" %>
+      <%= link_to "Edit", edit_product_path(item.itemable), class: "btn btn-success" %>
+      <% if item.itemable.available? %>
+        <%= link_to "Mark Unavailable", toggle_availability_product_path(item.itemable), 
+                    class: "btn btn-warning", 
+                    data: { turbo_method: :patch, turbo_confirm: "Are you sure you want to mark this product as unavailable?" } %>
+      <% else %>
+        <%= link_to "Mark Available", toggle_availability_product_path(item.itemable), 
+                    class: "btn btn-info", 
+                    data: { turbo_method: :patch } %>
+      <% end %>
+      <%= link_to "Delete", product_path(item.itemable), class: "btn btn-danger",
+                  data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this product?" } %>
+    <% elsif item.itemable_type == "Package" %>
+      <%= link_to "Edit", edit_package_path(item.itemable), class: "btn btn-success" %>
+      <% if item.itemable.available? %>
+        <%= link_to "Mark Unavailable", toggle_availability_package_path(item.itemable), 
+                    class: "btn btn-warning", 
+                    data: { turbo_method: :patch, turbo_confirm: "Are you sure you want to mark this package as unavailable?" } %>
+      <% else %>
+        <%= link_to "Mark Available", toggle_availability_package_path(item.itemable), 
+                    class: "btn btn-info", 
+                    data: { turbo_method: :patch } %>
+      <% end %>
+      <%= link_to "Delete", package_path(item.itemable), class: "btn btn-danger",
+                  data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this package?" } %>
+    <% end %>
+  </div>
 <% else %>
-  <%= button_to 'Add to Cart', order_items_path(item_id: item.id), method: :post, class: "btn btn-success" %>
+  <% if item.itemable.available? %>
+    <%= button_to 'Add to Cart', order_items_path(item_id: item.id), method: :post, class: "btn btn-success" %>
+  <% end %>
 <% end %>

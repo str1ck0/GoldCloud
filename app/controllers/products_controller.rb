@@ -36,6 +36,13 @@ class ProductsController < ApplicationController
     redirect_to root_path
   end
 
+  def toggle_availability
+    @product = Product.find(params[:id])
+    @product.update(available: !@product.available)
+    status = @product.available? ? 'available' : 'unavailable'
+    redirect_to item_path(@product.item), notice: "Product marked as #{status}"
+  end
+
   private
 
   def product_params

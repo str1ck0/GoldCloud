@@ -10,13 +10,18 @@
 <div class="container mb-navbar mt-header" data-controller="search">
   <h1>Latest Products</h1>
   <%= form_with(url: search_items_path, method: :get, class: "gc-form", local: false) do |f| %>
-    <%= f.text_field :query,
-                      class: "form-control gc-form",
-                      placeholder: "Search by name, strain, or grow type...",
-                      data: {
-                        search_target: "input",
-                        action: "input->search#search"
-                      } %>
+    <div class="search-input-wrapper">
+      <%= f.text_field :query,
+                        class: "form-control gc-form",
+                        placeholder: "Search by name, strain, or grow type...",
+                        data: {
+                          search_target: "input",
+                          action: "input->search#search input->search#updateIcon"
+                        } %>
+      <button type="button" class="search-icon-btn" data-search-target="iconBtn" data-action="click->search#handleIconClick">
+        <i class="bi bi-search" data-search-target="icon"></i>
+      </button>
+    </div>
     <% end %>
   <div data-search-target="results">
     <%= render partial: "items", locals: { items: @items } %>

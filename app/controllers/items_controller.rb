@@ -20,7 +20,11 @@ class ItemsController < ApplicationController
       @items = @items.select { |item| item.itemable.available? } if current_user&.role == "customer"
       
       respond_to do |format|
-        format.html { render partial: "items", locals: { items: @items }, layout: false }
+        if request.xhr?
+          format.html { render partial: "items", locals: { items: @items }, layout: false }
+        else
+          format.html { render :index }
+        end
         format.json { render json: @items }
       end
     rescue => e
@@ -28,7 +32,12 @@ class ItemsController < ApplicationController
       Rails.logger.error e.backtrace.join("\n")
       
       respond_to do |format|
-        format.html { render partial: "items", locals: { items: [] }, layout: false }
+        if request.xhr?
+          format.html { render partial: "items", locals: { items: [] }, layout: false }
+        else
+          @items = []
+          format.html { render :index }
+        end
         format.json { render json: { error: e.message }, status: 500 }
       end
     end

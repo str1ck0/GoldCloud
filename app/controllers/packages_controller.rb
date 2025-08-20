@@ -40,13 +40,22 @@ class PackagesController < ApplicationController
     redirect_to root_path
   end
 
+  def toggle_availability
+    @package = Package.find(params[:id])
+    @package.update(available: !@package.available)
+    status = @package.available? ? 'available' : 'unavailable'
+    redirect_to item_path(@package.item), notice: "Package marked as #{status}"
+  end
+
   private
 
   def package_params
     params.require(:package).permit(
       :name,
       :description,
-      :price, photos: [],
+      :price, 
+      :available,
+      photos: [],
       package_products_attributes: [:product_id, :quantity]
     )
   end

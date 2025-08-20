@@ -2,9 +2,56 @@
   display: flex;
   flex-direction: column;
 
-  background-color: transparent;
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, 0.5) !important;
 
   ::placeholder {
     color: rgba(255, 255, 255, 0.5);
+  }
+  
+  &:focus {
+    background-color: transparent !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: none !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 5px;
+  z-index: 10;
+  font-size: 16px;
+  transition: color 0.2s ease;
+  
+  &.search-mode {
+    cursor: default;
+    
+    &:hover {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  &.clear-mode {
+    cursor: pointer;
+    
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    &:focus {
+      outline: none;
+      color: rgba(255, 255, 255, 0.8);
+    }
   }
 }

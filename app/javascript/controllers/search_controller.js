@@ -1,7 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "results"]
+  static targets = ["input", "results", "iconBtn", "icon"]
+
+  connect() {
+    // Initialize the icon state
+    this.updateIcon()
+  }
 
   search() {
     // Clear any existing timeout to implement debouncing
@@ -34,6 +39,8 @@ export default class extends Controller {
         .then(html => {
           // Update the results container with the returned HTML
           this.resultsTarget.innerHTML = html;
+          // Update icon state after search
+          this.updateIcon();
         })
         .catch(error => {
           console.error('Search error:', error);
@@ -46,5 +53,38 @@ export default class extends Controller {
           }
         });
     }, 300) // Wait 300ms after last keystroke before sending request
+  }
+
+  clear() {
+    // Clear the input field
+    this.inputTarget.value = ''
+    
+    // Trigger a search to show all items again
+    this.search()
+    
+    // Focus back on the input
+    this.inputTarget.focus()
+  }
+
+  handleIconClick() {
+    // Only clear if we're in clear mode (input has content)
+    if (this.inputTarget.value.trim() !== '') {
+      this.clear()
+    }
+    // If it's search mode (empty input), do nothing
+  }
+
+  updateIcon() {
+    const hasContent = this.inputTarget.value.trim() !== ''
+    
+    if (hasContent) {
+      // Switch to clear mode
+      this.iconTarget.className = 'bi bi-x-lg'
+      this.iconBtnTarget.className = 'search-icon-btn clear-mode'
+    } else {
+      // Switch to search mode
+      this.iconTarget.className = 'bi bi-search'
+      this.iconBtnTarget.className = 'search-icon-btn search-mode'
+    }
   }
 }
